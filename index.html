@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Museum Audio Guide</title>
+  <title>Room Number 1 - Museum Audio Guide</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -17,25 +17,78 @@
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       display: inline-block;
+      max-width: 600px;
     }
     h1 {
       color: #333;
     }
+    h2 {
+      margin-top: 40px;
+      color: #444;
+    }
     audio {
-      margin-top: 20px;
+      margin-top: 10px;
       width: 100%;
-      max-width: 400px;
+      max-width: 500px;
+    }
+    .speed-control {
+      margin-top: 10px;
+    }
+    select {
+      padding: 4px 8px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🎧 Welcome to the Museum Audio Guide</h1>
-    <p>Your audio will play shortly. Please ensure your sound is on.</p>
-    <audio autoplay controls>
-      <source src="sample.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
+    <h1>🎧 Room Number 1</h1>
+    <p>Please ensure your sound is on. Tap play to listen.</p>
+
+    <div>
+      <h2>1. Rajender Singh</h2>
+      <audio id="audio1" controls>
+        <source src="rajender-singh.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="speed-control" data-audio-id="audio1"></div>
+    </div>
+
+    <div>
+      <h2>2. Muqbool Shervani</h2>
+      <audio id="audio2" controls>
+        <source src="muqbool-shervani.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="speed-control" data-audio-id="audio2"></div>
+    </div>
   </div>
+
+  <script>
+    const speeds = [0.75, 1, 1.25, 1.5, 2];
+
+    document.querySelectorAll('.speed-control').forEach(control => {
+      const audioId = control.getAttribute('data-audio-id');
+      const label = document.createElement('label');
+      label.textContent = 'Playback speed: ';
+
+      const select = document.createElement('select');
+      speeds.forEach(speed => {
+        const option = document.createElement('option');
+        option.value = speed;
+        option.textContent = `${speed}x${speed === 1 ? ' (Normal)' : ''}`;
+        if (speed === 1) option.selected = true;
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', () => {
+        const audio = document.getElementById(audioId);
+        if (audio) audio.playbackRate = parseFloat(select.value);
+      });
+
+      control.appendChild(label);
+      control.appendChild(select);
+    });
+  </script>
 </body>
 </html>
